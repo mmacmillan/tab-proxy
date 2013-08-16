@@ -1,0 +1,8 @@
+{
+  "name": "webserver",
+  "version": "0.0.1",
+  "description": "webserver",
+  "dependencies": {
+    "express": "*"
+  }
+}
