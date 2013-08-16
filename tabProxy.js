@@ -8,7 +8,7 @@ TabProxy.js
     Mike MacMillan
     mikejmacmillan@gmail.com
 */
-;!function($, undefined) {
+;!function(undefined) {
     var _methods = {},
         _bridge = { queue: {} };
 
@@ -93,8 +93,7 @@ TabProxy.js
             loadBridge();
 
             //** when the window closes, remove it from anything its subscribed to
-            var w = $(win);
-            w.on('storage', _bridge.handleEvent);
+            win.addEventListener('storage', _bridge.handleEvent);
         },
 
         bridge: function(key, ctx) {
@@ -117,4 +116,4 @@ TabProxy.js
     }
 
     window['TabProxy'] = TabProxy = _pxy;
-}(jQuery);
+}();
