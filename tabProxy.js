@@ -16,7 +16,6 @@ TabProxy.js
     if(!window.localStorage) return;
 
     function loadBridge(src) {
-        console.log('loading bridge');
         //** load the bridge from localStorage, ensuring its exists if not there
         var b = JSON.parse(src||localStorage.getItem(_pxy.storageKey));
         b && (_bridge = b) || localStorage.setItem(_pxy.storageKey, JSON.stringify((_bridge = { queue: {} })));
@@ -37,19 +36,16 @@ TabProxy.js
 
                 //** reset the queue with the assumption that things are handled; i dont like that this requires a double event, but meh for now
                 _bridge.queue = {};
-                setTimeout(function() {
-                    localStorage.setItem(_pxy.storageKey, JSON.stringify(_bridge));
-                    console.log('set ls to :', JSON.stringify(_bridge));
-                }, 0);
+                setTimeout(function() { localStorage.setItem(_pxy.storageKey, JSON.stringify(_bridge)); }, 0);
             }
         }
 
         _bridge.handleEvent = function(e) {
             //** make sure this is a bridge event
-            if(e.originalEvent && e.originalEvent.key !== _pxy.storageKey) return;
+            if(e && e.key !== _pxy.storageKey) return;
 
             //** sync the bridge with localStorage
-            loadBridge(e.originalEvent.newValue);
+            loadBridge(e.newValue);
 
             //** for each method in the queue, fire its handler
             for(var s in _bridge.queue) {
