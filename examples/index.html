@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/style.css"/>
+        <script src="http://codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
+        <script src="fakeComponent.js"></script>
+        <script src="tabProxy.js"></script>
+        <script>
+            TabProxy.bridge('FakeComponent.MethodOneHandler');
+
+            $(document).ready(function() {
+                $('#btn-fire').click(FakeComponent.MethodOne);
+            });
+        </script>
+
+    </head>
+    
+    <body>
+        <h1>Tab Proxy Demo</h1>
+        <p>This demonstrates how to synchronize or "bridge" methods between tabs.  A shared dependency is required, who's method's can be bridged, which is achieved via using localStorage.  Bridged methods, when fired, will trigger in all tabs with the same arguments used for each.</p>
+        <p>Open several tabs using the "open new tab" link below, and open dev tools so you can see the console output.  Then click the "invoke shared event" link here; each tab's console will show the same function has been invoked in each tab, with the same args.
+
+        <br><br>
+
+        <a href="/demo1.html" target="_blank">open new tab</a> |
+        <a href="#" id="btn-fire">invoke shared event</a>
+    </body>
+</html>
