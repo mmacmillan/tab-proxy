@@ -15,10 +15,10 @@ TabProxy.js
     //** polyfill/override the Storage object here if you feel up to it; currently unsupported
     if(!window.localStorage) return;
 
-    function loadBridge() {
+    function loadBridge(src) {
         console.log('loading bridge');
         //** load the bridge from localStorage, ensuring its exists if not there
-        var b = JSON.parse(localStorage.getItem(_pxy.storageKey));
+        var b = JSON.parse(src||localStorage.getItem(_pxy.storageKey));
         b && (_bridge = b) || localStorage.setItem(_pxy.storageKey, JSON.stringify((_bridge = { queue: {} })));
 
         //** provide the implementation for the bridge object
@@ -45,18 +45,18 @@ TabProxy.js
         }
 
         _bridge.handleEvent = function(e) {
-                    console.log('received event:', e.originalEvent.key);
             //** make sure this is a bridge event
             if(e.originalEvent && e.originalEvent.key !== _pxy.storageKey) return;
 
             //** sync the bridge with localStorage
-            loadBridge();
+            loadBridge(e.originalEvent.newValue);
 
             //** for each method in the queue, fire its handler
-            console.log('queue items: ', _bridge.queue);
             for(var s in _bridge.queue) {
                 var q = _bridge.queue[s];
                 q && q.forEach(function(evt) {
+                    if(evt.source == window._ProxyId) return; //** dont handle your own events...
+
                     //** get the fn handler by key invoking it with the proxied args if found
                     var handler = _methods[s];
                     handler && handler.fn && handler.fn.apply(handler.ctx, evt.args);
